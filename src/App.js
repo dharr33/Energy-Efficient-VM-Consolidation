@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import Optimize from './pages/Optimize';
 import OptimizationBackend from './pages/OptimizationBackend';
 import MLSimulation from './pages/mlSimulation';
+import MLComparison from './pages/MLComparison';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
       <Route path="/optimize" element={<Optimize dark={dark} setDark={setDark} apiBase={apiBase} />} />
       <Route path="/optimization-backend" element={<OptimizationBackend dark={dark} setDark={setDark} apiBase={apiBase}/>} />
       <Route path="/simulate-ml" element={<MLSimulation dark={dark} setDark={setDark} apiBase={apiBase} />} />
+      <Route path="/ml-comparison" element={<MLComparison />} />
 
     </Routes>
   );

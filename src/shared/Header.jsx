@@ -8,6 +8,7 @@ export default function Header({ dark, setDark }) {
       <nav style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
         <Link to="/" className="btn-primary" style={{ textDecoration: 'none' }}>Dashboard</Link>
         <Link to="/optimize" className="btn-primary" style={{ textDecoration: 'none' }}>Optimize</Link>
+        <Link to="/ml-comparison" className="btn-primary" style={{ textDecoration: 'none' }}>ML Comparison</Link>
       </nav>
       <button className="btn-primary" onClick={() => setDark(d => !d)}>{dark ? 'Light Mode' : 'Dark Mode'}</button>
     </div>
