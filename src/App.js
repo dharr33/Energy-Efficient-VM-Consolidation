@@ -1,5 +1,5 @@
 // src/App.js
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Dashboard from './pages/Dashboard';
@@ -7,7 +7,6 @@ import Optimize from './pages/Optimize';
 import OptimizationBackend from './pages/OptimizationBackend';
 import MLSimulation from './pages/mlSimulation';
 import MLComparison from './pages/MLComparison';
-
 
 function App() {
   const [metrics, setMetrics] = useState([
@@ -20,15 +19,16 @@ function App() {
   const apiBase = process.env.REACT_APP_API_BASE || 'http://localhost:5002';
 
   return (
-
-    <Routes>
-      <Route path="/" element={<Dashboard dark={dark} setDark={setDark} metrics={metrics} setMetrics={setMetrics} />} />
-      <Route path="/optimize" element={<Optimize dark={dark} setDark={setDark} apiBase={apiBase} />} />
-      <Route path="/optimization-backend" element={<OptimizationBackend dark={dark} setDark={setDark} apiBase={apiBase}/>} />
-      <Route path="/simulate-ml" element={<MLSimulation dark={dark} setDark={setDark} apiBase={apiBase} />} />
-      <Route path="/ml-comparison" element={<MLComparison />} />
-
-    </Routes>
+    <div className="App">
+      <Routes>
+        <Route path="/" element={<Dashboard dark={dark} setDark={setDark} metrics={metrics} setMetrics={setMetrics} apiBase={apiBase} />} />
+        <Route path="/optimize" element={<Optimize dark={dark} setDark={setDark} apiBase={apiBase} />} />
+        <Route path="/optimization-backend" element={<OptimizationBackend dark={dark} setDark={setDark} apiBase={apiBase}/>} />
+        <Route path="/simulate-ml" element={<MLSimulation dark={dark} setDark={setDark} apiBase={apiBase} />} />
+        <Route path="/ml-comparison" element={<MLComparison />} />
+      </Routes>
+    </div>
   );
 }
+
 export default App;
