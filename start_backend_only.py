@@ -1,22 +1,18 @@
 #!/usr/bin/env python3
 """
-Unified Project Startup Script
-This script starts the entire VM Placement Optimization project including:
-- React frontend
-- Flask backend APIs
-- ML model comparison system
-- All required dependencies
+Backend-Only Startup Script
+This script starts only the Python backend services (API servers) without requiring Node.js.
+Use this if you don't have Node.js installed or want to run just the backend.
 """
 
 import subprocess
 import sys
 import os
 import time
-import threading
 import webbrowser
 from pathlib import Path
 
-class ProjectStarter:
+class BackendStarter:
     def __init__(self):
         self.project_root = Path(__file__).parent
         self.processes = []
@@ -25,9 +21,9 @@ class ProjectStarter:
     def print_banner(self):
         """Print project startup banner"""
         print("=" * 80)
-        print("🚀 VM PLACEMENT OPTIMIZATION PROJECT STARTUP")
+        print("🚀 VM PLACEMENT OPTIMIZATION - BACKEND ONLY")
         print("=" * 80)
-        print("Starting all services...")
+        print("Starting Python backend services...")
         print("=" * 80)
     
     def check_python_version(self):
@@ -64,64 +60,13 @@ class ProjectStarter:
             except subprocess.CalledProcessError:
                 print(f"⚠️  Warning: Could not install {package}")
     
-    def check_node_available(self):
-        """Check if Node.js and npm are available"""
-        try:
-            # Check if npm is available
-            subprocess.check_call(["npm", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            return True
-        except (subprocess.CalledProcessError, FileNotFoundError):
-            return False
-    
-    def install_node_dependencies(self):
-        """Install Node.js dependencies"""
-        print("\n📦 Checking Node.js dependencies...")
-        
-        # Check if Node.js is available
-        if not self.check_node_available():
-            print("⚠️  Node.js/npm not found. Skipping Node.js dependencies.")
-            print("   You can install them manually later with: npm install")
-            return False
-        
-        try:
-            # Check if package.json exists
-            package_json = self.project_root / "package.json"
-            if not package_json.exists():
-                print("⚠️  package.json not found. Skipping Node.js dependencies.")
-                return False
-            
-            # Install React dependencies
-            print("Installing React dependencies...")
-            subprocess.check_call([
-                "npm", "install", "--silent"
-            ], cwd=self.project_root, shell=True)
-            print("✅ React dependencies installed")
-            
-            # Install chart dependencies
-            print("Installing Chart.js dependencies...")
-            subprocess.check_call([
-                "npm", "install", "chart.js", "react-chartjs-2", "--silent"
-            ], cwd=self.project_root, shell=True)
-            print("✅ Chart.js dependencies installed")
-            
-            return True
-            
-        except subprocess.CalledProcessError as e:
-            print(f"⚠️  Warning: Could not install Node dependencies: {e}")
-            print("   You can install them manually with: npm install")
-            return False
-        except Exception as e:
-            print(f"⚠️  Warning: Unexpected error with Node dependencies: {e}")
-            return False
-    
     def create_directories(self):
         """Create necessary directories"""
         print("\n📁 Creating project directories...")
         
         directories = [
             "vmp/models",
-            "vmp/logs",
-            "public/uploads"
+            "vmp/logs"
         ]
         
         for directory in directories:
@@ -139,7 +84,6 @@ class ProjectStarter:
             try:
                 import pandas as pd
                 import numpy as np
-                import random
                 
                 # Generate synthetic data
                 np.random.seed(42)
@@ -209,66 +153,34 @@ class ProjectStarter:
         except Exception as e:
             print(f"❌ Failed to start ML API: {e}")
     
-    def start_react_frontend(self):
-        """Start the React frontend"""
-        print("\n⚛️  Starting React Frontend...")
-        
-        # Check if Node.js is available
-        if not self.check_node_available():
-            print("⚠️  Node.js/npm not found. Skipping React frontend.")
-            print("   You can start it manually later with: npm start")
-            return False
-        
-        try:
-            # Check if package.json exists
-            package_json = self.project_root / "package.json"
-            if not package_json.exists():
-                print("⚠️  package.json not found. Skipping React frontend.")
-                return False
-            
-            # Start React development server
-            process = subprocess.Popen([
-                "npm", "start"
-            ], cwd=self.project_root, shell=True)
-            
-            self.processes.append(("React Frontend", process))
-            print("✅ React frontend starting on http://localhost:3000")
-            return True
-            
-        except Exception as e:
-            print(f"❌ Failed to start React frontend: {e}")
-            print("   You can start it manually with: npm start")
-            return False
-    
     def wait_for_services(self):
         """Wait for services to start up"""
         print("\n⏳ Waiting for services to start...")
-        time.sleep(10)  # Give services time to start
-    
-    def open_browser(self):
-        """Open browser to the application"""
-        print("\n🌐 Opening application in browser...")
-        try:
-            webbrowser.open("http://localhost:3000")
-            print("✅ Browser opened to http://localhost:3000")
-        except Exception as e:
-            print(f"⚠️  Could not open browser automatically: {e}")
-            print("Please open http://localhost:3000 manually")
+        time.sleep(5)  # Give services time to start
     
     def print_service_info(self):
         """Print service information"""
         print("\n" + "=" * 80)
-        print("🎉 ALL SERVICES STARTED SUCCESSFULLY!")
+        print("🎉 BACKEND SERVICES STARTED SUCCESSFULLY!")
         print("=" * 80)
-        print("📱 Frontend:     http://localhost:3000")
         print("🔧 Backend API:  http://localhost:5002")
         print("🤖 ML API:       http://localhost:5001")
         print("=" * 80)
-        print("📋 Available Pages:")
-        print("   • Dashboard:        http://localhost:3000/")
-        print("   • Optimization:     http://localhost:3000/optimize")
-        print("   • ML Comparison:    http://localhost:3000/ml-comparison")
-        print("   • ML Simulation:    http://localhost:3000/simulate-ml")
+        print("📋 Available API Endpoints:")
+        print("   • Backend API:")
+        print("     - GET  /api/v1/metrics")
+        print("     - POST /api/v1/optimize")
+        print("   • ML API:")
+        print("     - POST /api/ml/initialize")
+        print("     - GET  /api/ml/results")
+        print("     - POST /api/ml/predict")
+        print("     - GET  /api/ml/feature-importance")
+        print("=" * 80)
+        print("💡 To start the React frontend:")
+        print("   1. Install Node.js from https://nodejs.org")
+        print("   2. Run: npm install")
+        print("   3. Run: npm start")
+        print("   4. Open: http://localhost:3000")
         print("=" * 80)
         print("🛑 Press Ctrl+C to stop all services")
         print("=" * 80)
@@ -306,33 +218,14 @@ class ProjectStarter:
             self.print_banner()
             self.check_python_version()
             self.install_python_dependencies()
-            
-            # Try to install Node.js dependencies (optional)
-            node_available = self.install_node_dependencies()
-            
             self.create_directories()
             self.generate_sample_data()
             
-            # Start backend services (always try)
+            # Start backend services
             self.start_backend_api()
             self.start_ml_api()
             
-            # Start React frontend (only if Node.js is available)
-            react_started = False
-            if node_available:
-                react_started = self.start_react_frontend()
-            
             self.wait_for_services()
-            
-            # Only open browser if React started
-            if react_started:
-                self.open_browser()
-            else:
-                print("\n🌐 React frontend not available. You can access:")
-                print("   • Backend API: http://localhost:5002")
-                print("   • ML API: http://localhost:5001")
-                print("   • Install Node.js and run 'npm start' for frontend")
-            
             self.print_service_info()
             
             # Monitor processes
@@ -342,14 +235,12 @@ class ProjectStarter:
             print("\n🛑 Shutdown requested by user")
         except Exception as e:
             print(f"\n❌ Error during startup: {e}")
-            print("   This is usually due to missing dependencies.")
-            print("   Please check the error message above for details.")
         finally:
             self.cleanup()
 
 def main():
     """Main function"""
-    starter = ProjectStarter()
+    starter = BackendStarter()
     starter.run()
 
 if __name__ == "__main__":

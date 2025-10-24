@@ -39,6 +39,14 @@ REM Run the Python startup script
 echo 🚀 Starting unified project startup...
 python start_project.py
 
+REM If the main script fails, try backend-only mode
+if errorlevel 1 (
+    echo.
+    echo ⚠️  Main startup failed. Trying backend-only mode...
+    echo.
+    python start_backend_only.py
+)
+
 echo.
 echo 👋 Project startup completed.
 pause
